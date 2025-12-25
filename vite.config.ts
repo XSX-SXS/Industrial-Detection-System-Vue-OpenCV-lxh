@@ -1,0 +1,45 @@
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
+import type { UserConfig } from 'vite'
+// https://vitejs.dev/config/
+export default defineConfig({
+    plugins: [
+        vue({
+            template: { transformAssetUrls }
+        }),
+        quasar({
+            sassVariables: 'src/styles/quasar-variables.scss'
+        })
+    ],
+    resolve: {
+        alias: {
+            '@': '/src'
+        }
+    },
+    server: {
+        port: 3080,
+        open: true,
+        host: '0.0.0.0', // 关键：监听所有网络接口，允许内网IP访问
+        strictPort: true, // 端口被占用时直接报错，而非自动换端口
+        allowedHosts: 'all',
+        proxy: {
+            '/api': {
+                target: 'http://localhost:8000',
+                changeOrigin: true
+            }
+        }
+    },
+    build: {
+        target: 'es2015',
+        chunkSizeWarningLimit: 2000,
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    'vendor': ['vue', 'vue-router', 'pinia', 'quasar'],
+                    'echarts': ['echarts']
+                }
+            }
+        }
+    }
+} as UserConfig)
