@@ -1,5 +1,8 @@
 // 全局样式定义
 
+// 导入Quasar变量
+@import './quasar-variables.scss';
+
 // 工业风格变量
 :root {
   --dark-page: transparent;

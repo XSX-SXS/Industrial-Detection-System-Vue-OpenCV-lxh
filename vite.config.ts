@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
 import type { UserConfig } from 'vite'
+import { resolve } from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
@@ -9,7 +10,7 @@ export default defineConfig({
             template: { transformAssetUrls }
         }),
         quasar({
-            sassVariables: 'src/styles/quasar-variables.scss'
+            sassVariables: resolve(__dirname, 'src/styles/quasar-variables.scss')
         })
     ],
     resolve: {
@@ -22,7 +23,7 @@ export default defineConfig({
         open: true,
         host: '0.0.0.0', // 关键：监听所有网络接口，允许内网IP访问
         strictPort: true, // 端口被占用时直接报错，而非自动换端口
-        allowedHosts: 'all',
+        allowedHosts: true,
         proxy: {
             '/api': {
                 target: 'http://localhost:8000',
