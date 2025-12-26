@@ -2,6 +2,10 @@
 
 三是科技 江钨项目
 
+python -m uvicorn src.backend.main:app --reload
+
+npm run dev
+
 原始文献链接：https://mp.weixin.qq.com/s/SHFpFBWoQCOPrXFHkTYOMg?exptype=unsubscribed_card_recommend_article_u2i_mainprocess_coarse_sort_tlfeeds&ranksessionid=1765431118_1&req_id=1765416188536733&scene=169&subscene=200&sessionid=1765431118&flutter_pos=5&clicktime=1765431134&enterid=1765431134&finder_biz_enter_id=5&jumppath=1001_1765430980273,1102_1765431098035,1001_1765431114327,50094_1765431118381&jumppathdepth=4&ascene=56&fasttmpl_type=0&fasttmpl_fullversion=8035353-zh_CN-zip&fasttmpl_flag=0&realreporttime=1765431134063&devicetype=android-31&version=28004236&nettype=WIFI&abtest_cookie=AAACAA==&lang=zh_CN&session_us=gh_2d1a86caf781&countrycode=CN&exportkey=n_ChQIAhIQDnt+VHVNtNdPYQWkCSgWjxLxAQIE97dBBAEAAAAAADCOAyG5o88AAAAOpnltbLcz9gKNyK89dVj0pjwHe2dFhfiFO0CwBEQxBTagnRQ6ha83p5rUwqoG7TeQGlAoZC8H+APj3Mw2EgS+PDhbWy2bR/PL09CxfImGMJieZvlH+PfdoTBAwZ6wsQ3ZnI1D+amLR6TbvGdI3335r7VYGctTBI4PiPBUcQh3Ja0dpxpzo4kEOPgW1tqnoAKzGObf9gfkXTsM85oIFB98A+MWOeUTMaTLugLJPtRO6QqkY0+IsDT+PZG4LyzrCvFX8HeBfVfCgP7NGALz6reqdJGZCnZmF+i9NpQ=&pass_ticket=t+dCpVmRRwMTzKg+Xh2fHswZdv+xSUwwoy7iWGlaasFKUl+UsS1lphl8L0up8s6a&wx_header=3&from=industrynews&color_scheme=light
 
 原始代码链接：https://www.gitpp.com/chatwike/project-gpp-0525002
