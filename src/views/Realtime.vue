@@ -521,7 +521,9 @@ const stationOptions = ref([
   { value: 2, name: '工位2', description: '上表面检测' },
   { value: 3, name: '工位3', description: '尺寸+上边刃口检测' },
   { value: 4, name: '工位4', description: '侧面检测' },
-  { value: 5, name: '工位5', description: '打标检测' }
+  { value: 5, name: '工位5', description: '打标检测' },
+  { value: 6, name: '工位6', description: 'CVD' },
+  { value: 7, name: '工位7', description: 'PVD' }
 ])
 
 // 确保选中的是数值而不是对象
