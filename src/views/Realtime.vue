@@ -238,50 +238,6 @@
                 {{ t(`detection.result.status.${detectionResult.passed ? 'pass' : 'fail'}`) }}
               </div>
               <div class="text-positive text-center q-mt-sm">成功检测率: 99.99%</div>
-              <q-list separator>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label>{{ t('detection.result.details.time') }}</q-item-label>
-                    <q-item-label caption>{{ formatDateTime(detectionResult.timestamp) }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item v-if="detectionResult.sourceType">
-                  <q-item-section>
-                    <q-item-label>{{ t('detection.result.details.source') }}</q-item-label>
-                    <q-item-label caption>{{ detectionResult.sourceType }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label>{{ t('detection.result.details.text') }}</q-item-label>
-                    <q-item-label caption>{{ detectionResult.text || t('detection.result.details.noText') }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label>{{ t('detection.result.details.confidence') }}</q-item-label>
-                    <q-item-label caption>{{ detectionResult.confidence ? detectionResult.confidence.toFixed(1) + '%' : 'N/A' }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label>{{ t('detection.result.details.correctRate') || '正确识别率' }}</q-item-label>
-                    <q-item-label caption class="text-positive">99.99%</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item v-if="detectionResult.errorReason">
-                  <q-item-section>
-                    <q-item-label>{{ t('detection.result.details.error') }}</q-item-label>
-                    <q-item-label caption class="text-negative">{{ detectionResult.errorReason }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item v-if="detectionResult.fileName">
-                  <q-item-section>
-                    <q-item-label>{{ t('detection.result.details.filename') }}</q-item-label>
-                    <q-item-label caption>{{ detectionResult.fileName }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
             </div>
             <div v-else class="no-result-placeholder q-mt-md">
               <!-- 添加图片上传功能 -->
@@ -777,6 +733,9 @@ const mergedOperationOptions = computed<OperationOption[]>(() => {
       })
     })
   }
+  
+  // 添加缺陷检测选项
+  options.push({ label: '缺陷检测', value: 'defectDetection', type: 'operation', description: '检测图像中的缺陷', supportsDetection: true })
   
   return options
 })
@@ -1506,11 +1465,20 @@ const onCapture = async (result: any) => {
     })
 
     // 获取操作信息
-    const operationType = selectedOperation.value.startsWith('operation:') ? 'operation' : 'pipeline'
-    const operationId = parseInt(selectedOperation.value.split(':')[1])
-
-    if (isNaN(operationId)) {
-      throw new Error('无效的操作ID')
+    let operationType: "operation" | "pipeline" = "operation"
+    let operationId = 0
+    
+    // 特殊处理缺陷检测选项
+    if (selectedOperation.value === 'defectDetection') {
+      operationType = 'operation'
+      operationId = 999 // 分配一个固定ID给缺陷检测
+    } else {
+      operationType = selectedOperation.value.startsWith('operation:') ? 'operation' : 'pipeline'
+      operationId = parseInt(selectedOperation.value.split(':')[1])
+      
+      if (isNaN(operationId)) {
+        throw new Error('无效的操作ID')
+      }
     }
 
     // 保存原始图像数据
@@ -2064,11 +2032,20 @@ const startStream = async () => {
     }
     
     // 确定操作类型和ID
-    const operationType = selectedOperation.value.startsWith('operation:') ? 'operation' : 'pipeline'
-    const operationId = parseInt(selectedOperation.value.split(':')[1])
+    let operationType: "operation" | "pipeline" = "operation"
+    let operationId = 0
     
-    if (isNaN(operationId)) {
-      throw new Error(t('detection.notifications.invalidOperation'))
+    // 特殊处理缺陷检测选项
+    if (selectedOperation.value === 'defectDetection') {
+      operationType = 'operation'
+      operationId = 999 // 分配一个固定ID给缺陷检测
+    } else {
+      operationType = selectedOperation.value.startsWith('operation:') ? 'operation' : 'pipeline'
+      operationId = parseInt(selectedOperation.value.split(':')[1])
+      
+      if (isNaN(operationId)) {
+        throw new Error(t('detection.notifications.invalidOperation'))
+      }
     }
     
     // 获取摄像头ID
