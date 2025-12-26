@@ -207,7 +207,16 @@
           <q-card-section>
             <div class="row items-center justify-between">
               <div class="text-h6">{{ t('detection.result.title') }}</div>
-              <div class="result-status-toggle">
+              <div class="result-status-toggle q-flex items-center">
+                <!-- 重新上传按钮 -->
+                <q-btn
+                  size="xs"
+                  color="primary"
+                  icon="refresh"
+                  @click="reuploadImage"
+                  class="q-mr-sm"
+                  dense
+                />
                 <q-btn-toggle
                   v-model="resultStatusFilter"
                   :options="[
@@ -1375,6 +1384,35 @@ const onResultStatusChange = async (status: string) => {
   if (manualUploadFiles.value && manualUploadFiles.value.length > 0) {
     await applyManualResult()
   }
+}
+
+// 添加重新上传图片的函数
+const reuploadImage = () => {
+  // 清除当前的检测结果
+  if (detectionResult.value?.imageData) {
+    URL.revokeObjectURL(detectionResult.value.imageData)
+  }
+  detectionResult.value = null
+  
+  // 清除手动上传的文件
+  manualUploadFiles.value = []
+  
+  // 重置结果状态过滤器
+  resultStatusFilter.value = 'all'
+  
+  // 打开文件选择对话框
+  const fileInput = document.createElement('input')
+  fileInput.type = 'file'
+  fileInput.accept = 'image/*'
+  fileInput.onchange = async (e) => {
+    const target = e.target as HTMLInputElement
+    if (target.files && target.files.length > 0) {
+      const file = target.files[0]
+      manualUploadFiles.value = [file]
+      await onManualImageSelect(file)
+    }
+  }
+  fileInput.click()
 }
 
 // 应用手动检测结果
