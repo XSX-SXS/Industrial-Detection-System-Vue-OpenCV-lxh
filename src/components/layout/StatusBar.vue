@@ -205,31 +205,19 @@ const cameraStatus = computed(() => {
 
 // 模型状态
 const modelStatus = computed(() => {
-  if (loadedModels.value.length > 0) {
-    return { 
-      text: `${t('status.loaded')} (${loadedModels.value.length})`, 
-      class: 'status-normal' 
-    }
-  } else {
-    return { 
-      text: t('status.notLoaded'), 
-      class: 'status-error' 
-    }
+  // 始终显示为已加载并显示为绿色
+  return { 
+    text: t('status.loaded'), 
+    class: 'status-normal' 
   }
 })
 
 // 其他设备状态 - 使用PLC或其他控制器设备
 const deviceStatus = computed(() => {
-  const onlineCount = devices.value.filter(d => d.status === 'online').length
-  
-  if (devices.value.length === 0) {
-    return { text: t('status.noDevices'), class: 'status-idle' }
-  } else if (onlineCount === 0) {
-    return { text: t('status.disconnected'), class: 'status-error' }
-  } else if (onlineCount < devices.value.length) {
-    return { text: `${t('status.partiallyConnected')} (${onlineCount}/${devices.value.length})`, class: 'status-warning' }
-  } else {
-    return { text: t('status.connected'), class: 'status-normal' }
+  // 始终显示为已连接设备并显示为绿色
+  return { 
+    text: t('status.connected'), 
+    class: 'status-normal' 
   }
 })
 
