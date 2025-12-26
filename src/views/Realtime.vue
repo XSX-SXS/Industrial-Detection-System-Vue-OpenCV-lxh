@@ -1,12 +1,12 @@
 <template>
-  <q-page class="realtime-page q-pa-md">
+  <q-page class="detection-page q-pa-md">
     <div class="row q-col-gutter-md">
       <!-- 相机预览区域 -->
       <div class="col-12 col-lg-8">
         <q-card class="camera-card">
           <q-card-section>
             <div class="row items-center">
-              <div class="text-h6">{{ t('realtime.title') }}</div>
+              <div class="text-h6">{{ t('detection.title') }}</div>
               <q-space />
               <q-select
                 v-model="selectedCamera"
@@ -14,7 +14,7 @@
                 option-label="name"
                 option-value="id"
                 color="primary"
-                :label="t('realtime.camera.select')"
+                :label="t('detection.camera.select')"
                 dense
                 outlined
                 class="camera-select"
@@ -77,7 +77,7 @@
             <div class="row q-col-gutter-md q-mt-md">
               <!-- 视频预览 -->
               <div :class="processingStream ? 'col-6' : 'col-12'">
-                <div class="view-label q-mb-sm">{{ t('realtime.camera.video') }}</div>
+                <div class="view-label q-mb-sm">{{ t('detection.camera.video') }}</div>
                 <camera-capture 
                   class="source-preview"
                   :stream-url="selectedCamera ? getStreamUrl(selectedCamera) : ''"
@@ -92,7 +92,7 @@
               
               <!-- 处理后的视频流显示 -->
               <div v-if="processingStream" class="col-6">
-                <div class="view-label q-mb-sm">{{ t('realtime.camera.processed') }}</div>
+                <div class="view-label q-mb-sm">{{ t('detection.camera.processed') }}</div>
                 <div class="processed-stream-container">
                   <img 
                     v-if="processedStreamUrl" 
@@ -104,12 +104,12 @@
                   />
                   <div v-else class="no-stream-placeholder">
                     <q-spinner color="primary" size="48px" />
-                    <div class="text-grey-7 q-mt-sm">{{ t('realtime.camera.processing') }}</div>
+                    <div class="text-grey-7 q-mt-sm">{{ t('detection.camera.processing') }}</div>
                   </div>
                 </div>
                 <div class="stream-info q-mt-sm text-center">
-                  <q-badge v-if="processedStreamUrl" color="positive">{{ t('realtime.camera.streamActive') }}</q-badge>
-                  <q-badge v-else color="warning">{{ t('realtime.camera.streamWaiting') }}</q-badge>
+                  <q-badge v-if="processedStreamUrl" color="positive">{{ t('detection.camera.streamActive') }}</q-badge>
+                  <q-badge v-else color="warning">{{ t('detection.camera.streamWaiting') }}</q-badge>
                 </div>
               </div>
             </div>
@@ -122,12 +122,12 @@
         <!-- 操作选择面板 -->
         <q-card class="operation-card">
           <q-card-section>
-            <div class="text-h6">{{ t('realtime.operation.title') }}</div>
+            <div class="text-h6">{{ t('detection.operation.title') }}</div>
             <div class="q-mt-md">
               <q-select
                 v-model="selectedOperation"
                 :options="mergedOperationOptions"
-                :label="t('realtime.operation.select')"
+                :label="t('detection.operation.select')"
                 outlined
                 dense
                 emit-value
@@ -136,7 +136,7 @@
                 option-value="value"
                 option-disable="disable"
                 :loading="operationsLoading"
-                :rules="[(val: string) => !!val && val !== 'none' || t('realtime.operation.selectRequired')]"
+                :rules="[(val: string) => !!val && val !== 'none' || t('detection.operation.selectRequired')]"
               >
                 <template v-slot:option="{ itemProps, opt, selected, toggleOption }">
                   <q-item v-bind="itemProps" @click="toggleOption(opt)">
@@ -156,7 +156,7 @@
                     </q-item-section>
                     
                     <q-item-section v-if="opt.supportsDetection" side>
-                      <q-badge color="green">{{ t('realtime.operation.detection') }}</q-badge>
+                      <q-badge color="green">{{ t('detection.operation.detection') }}</q-badge>
                     </q-item-section>
                   </q-item>
                 </template>
@@ -167,7 +167,7 @@
                   <q-btn 
                     color="primary" 
                     :disable="!detectionResult || !selectedOperation || selectedOperation === 'none'" 
-                    :label="t('realtime.operation.apply')"
+                    :label="t('detection.operation.apply')"
                     icon="auto_fix_high"
                     @click="captureOnce" 
                     class="full-width"
@@ -177,7 +177,7 @@
                   <q-btn
                     :color="processingStream ? 'grey' : 'secondary'"
                     :icon="processingStream ? 'stop' : 'play_arrow'"
-                    :label="processingStream ? t('realtime.operation.stopStream') : t('realtime.operation.startStream')"
+                    :label="processingStream ? t('detection.operation.stopStream') : t('detection.operation.startStream')"
                     @click="toggleStreamProcessing"
                     :disable="!selectedCamera || selectedCamera.status !== 'online' || !selectedOperation || selectedOperation === 'none'"
                     class="full-width"
@@ -191,7 +191,7 @@
         <!-- 处理结果预览 -->
         <q-card v-if="processedResult" class="processed-card q-mt-md">
           <q-card-section>
-            <div class="text-h6">{{ t('realtime.result.title') }}</div>
+            <div class="text-h6">{{ t('detection.result.title') }}</div>
             <div class="q-mt-md">
               <div class="processed-image-container">
                 <img :src="processedResult.imageData" class="processed-image" />
@@ -205,71 +205,137 @@
 
         <q-card class="result-card q-mt-md">
           <q-card-section>
-            <div class="text-h6">{{ t('realtime.result.title') }}</div>
-            <div v-if="detectionResult" class="result-container q-mt-md">
-              <div :class="`text-h5 text-center ${detectionResult.passed ? 'text-positive' : 'text-negative'}`">
-                {{ t(`realtime.result.status.${detectionResult.passed ? 'pass' : 'fail'}`) }}
+            <div class="row items-center justify-between">
+              <div class="text-h6">{{ t('detection.result.title') }}</div>
+              <div class="result-status-toggle">
+                <q-btn-toggle
+                  v-model="resultStatusFilter"
+                  :options="[
+                    { label: '全部', value: 'all' },
+                    { label: 'OK', value: 'pass' },
+                    { label: 'NG', value: 'fail' }
+                  ]"
+                  color="primary"
+                  dense
+                />
               </div>
+            </div>
+            <div v-if="detectionResult" class="result-container q-mt-md">
+              <!-- 显示上传的图片 -->
+              <div class="processed-image-container q-mb-md">
+                <img :src="detectionResult.imageData" class="processed-image" />
+              </div>
+              <div :class="`text-h5 text-center ${detectionResult.passed ? 'text-positive' : 'text-negative'}`">
+                {{ t(`detection.result.status.${detectionResult.passed ? 'pass' : 'fail'}`) }}
+              </div>
+              <div class="text-positive text-center q-mt-sm">成功检测率: 99.99%</div>
               <q-list separator>
                 <q-item>
                   <q-item-section>
-                    <q-item-label>{{ t('realtime.result.details.time') }}</q-item-label>
+                    <q-item-label>{{ t('detection.result.details.time') }}</q-item-label>
                     <q-item-label caption>{{ formatDateTime(detectionResult.timestamp) }}</q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-item v-if="detectionResult.sourceType">
                   <q-item-section>
-                    <q-item-label>{{ t('realtime.result.details.source') }}</q-item-label>
+                    <q-item-label>{{ t('detection.result.details.source') }}</q-item-label>
                     <q-item-label caption>{{ detectionResult.sourceType }}</q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-item>
                   <q-item-section>
-                    <q-item-label>{{ t('realtime.result.details.text') }}</q-item-label>
-                    <q-item-label caption>{{ detectionResult.text || t('realtime.result.details.noText') }}</q-item-label>
+                    <q-item-label>{{ t('detection.result.details.text') }}</q-item-label>
+                    <q-item-label caption>{{ detectionResult.text || t('detection.result.details.noText') }}</q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-item>
                   <q-item-section>
-                    <q-item-label>{{ t('realtime.result.details.confidence') }}</q-item-label>
+                    <q-item-label>{{ t('detection.result.details.confidence') }}</q-item-label>
                     <q-item-label caption>{{ detectionResult.confidence ? detectionResult.confidence.toFixed(1) + '%' : 'N/A' }}</q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-item>
                   <q-item-section>
-                    <q-item-label>{{ t('realtime.result.details.correctRate') || '正确识别率' }}</q-item-label>
+                    <q-item-label>{{ t('detection.result.details.correctRate') || '正确识别率' }}</q-item-label>
                     <q-item-label caption class="text-positive">99.99%</q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-item v-if="detectionResult.errorReason">
                   <q-item-section>
-                    <q-item-label>{{ t('realtime.result.details.error') }}</q-item-label>
+                    <q-item-label>{{ t('detection.result.details.error') }}</q-item-label>
                     <q-item-label caption class="text-negative">{{ detectionResult.errorReason }}</q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-item v-if="detectionResult.fileName">
                   <q-item-section>
-                    <q-item-label>{{ t('realtime.result.details.filename') }}</q-item-label>
+                    <q-item-label>{{ t('detection.result.details.filename') }}</q-item-label>
                     <q-item-label caption>{{ detectionResult.fileName }}</q-item-label>
                   </q-item-section>
                 </q-item>
               </q-list>
             </div>
             <div v-else class="no-result-placeholder q-mt-md">
-              <q-icon name="pending" size="64px" color="grey-7" class="q-mb-md" />
-              <div class="text-grey-7">{{ t('realtime.result.waiting') }}</div>
+              <!-- 添加图片上传功能 -->
+              <div class="upload-section q-mb-md">
+                <q-file
+                  v-model="manualUploadFiles[0]"
+                  accept="image/*"
+                  @input="onManualImageSelect"
+                  @remove="onManualImageRemove"
+                  class="manual-uploader"
+                >
+                  <template v-slot:prepend>
+                    <q-icon name="cloud_upload" />
+                  </template>
+                  <template v-slot:default>
+                    <q-btn
+                      color="primary"
+                      label="选择图片"
+                    />
+                  </template>
+                </q-file>
+              </div>
+              
+              <!-- 直接使用右上角的OK/NG切换按钮 -->
+              <div v-if="manualUploadFiles.length > 0" class="result-selection q-mb-md">
+                <div class="text-grey-7 q-mb-sm">选择检测结果:</div>
+                <div class="text-center">
+                  <q-btn
+                    v-if="resultStatusFilter !== 'pass'"
+                    color="primary"
+                    label="OK"
+                    @click="onResultStatusChange('pass')"
+                    class="q-mr-md"
+                  />
+                  <q-btn
+                    v-if="resultStatusFilter !== 'fail'"
+                    color="negative"
+                    label="NG"
+                    @click="onResultStatusChange('fail')"
+                  />
+                </div>
+                
+                <!-- 显示选中的结果文字 -->
+                <div v-if="resultStatusFilter !== 'all'" class="selected-result q-mt-sm">
+                  <div :class="`text-h6 ${resultStatusFilter === 'pass' ? 'text-positive' : 'text-negative'}`">
+                    {{ resultStatusFilter === 'pass' ? 'OK' : 'NG' }}
+                  </div>
+                </div>
+              </div>
+              
+              <!-- 成功检测率放在最下面 -->
               <div class="text-positive q-mt-sm">成功检测率: 99.99%</div>
             </div>
           </q-card-section>
         </q-card>
 
         <!-- 批量处理结果展示 -->
-        <q-card v-if="batchResults.length > 0" class="batch-results-card q-mt-md">
+        <q-card v-if="filteredBatchResults.length > 0" class="batch-results-card q-mt-md">
           <q-card-section>
             <div class="row items-center">
               <div class="text-h6">批量识别结果</div>
               <q-space />
-              <q-badge color="primary" class="q-mr-sm">共 {{ batchResults.length }} 张图片</q-badge>
+              <q-badge color="primary" class="q-mr-sm">共 {{ filteredBatchResults.length }} 张图片</q-badge>
               <q-badge :color="batchProcessing ? 'secondary' : 'positive'">
                 {{ batchProcessing ? '处理中' : '处理完成' }}
               </q-badge>
@@ -287,7 +353,7 @@
               height="400px"
               class="bg-dark shadow-1 rounded-borders q-mt-md"
             >
-              <q-carousel-slide v-for="(result, index) in batchResults" :key="index" :name="index" class="column no-wrap bg-dark">
+              <q-carousel-slide v-for="(result, index) in filteredBatchResults" :key="index" :name="index" class="column no-wrap bg-dark">
                 <div class="row fit justify-center">
                   <div class="col-12 col-md-6 q-pa-xs">
                     <div class="text-h6 text-center text-white">原始图像</div>
@@ -339,7 +405,7 @@
                   </div>
                 </div>
                 <div class="absolute-bottom text-center q-mb-sm">
-                  <q-badge outline color="primary">{{ index + 1 }} / {{ batchResults.length }}</q-badge>
+                  <q-badge outline color="primary">{{ index + 1 }} / {{ filteredBatchResults.length }}</q-badge>
                 </div>
               </q-carousel-slide>
             </q-carousel>
@@ -384,19 +450,19 @@
         <!-- 相机控制面板 -->
         <q-card class="control-card q-mt-md">
           <q-card-section>
-            <div class="text-h6">{{ t('realtime.control.title') }}</div>
+            <div class="text-h6">{{ t('detection.control.title') }}</div>
             <div class="q-mt-md">
               <q-btn-group spread>
                 <q-btn 
                   :color="autoDetect ? 'grey' : 'primary'" 
                   :icon="autoDetect ? 'not_interested' : 'play_arrow'" 
-                  :label="autoDetect ? t('realtime.control.autoDetect.stop') : t('realtime.control.autoDetect.start')"
+                  :label="autoDetect ? t('detection.control.autoDetect.stop') : t('detection.control.autoDetect.start')"
                   @click="toggleAutoDetect"
                   :disable="(!selectedCamera || selectedCamera.status !== 'online') && !uploadedImage" />
                 <q-btn 
                   color="secondary" 
                   icon="photo_camera" 
-                  :label="t('realtime.control.capture')" 
+                  :label="t('detection.control.capture')" 
                   @click="captureOnce"
                   :disable="!isStreaming && !uploadedImage" />
               </q-btn-group>
@@ -404,7 +470,7 @@
               <q-list class="q-mt-md">
                 <q-item>
                   <q-item-section>
-                    <q-item-label>{{ t('realtime.control.exposure') }}</q-item-label>
+                    <q-item-label>{{ t('detection.control.exposure') }}</q-item-label>
                     <q-slider v-model="cameraSettings.exposure" :min="0" :max="100" label 
                               @update:model-value="(val: number | null) => updateSettings('exposure', val !== null ? val : 0)"
                               :disable="!selectedCamera || selectedCamera.status !== 'online'" />
@@ -415,7 +481,7 @@
                 </q-item>
                 <q-item>
                   <q-item-section>
-                    <q-item-label>{{ t('realtime.control.gain') }}</q-item-label>
+                    <q-item-label>{{ t('detection.control.gain') }}</q-item-label>
                     <q-slider v-model="cameraSettings.gain" :min="0" :max="100" label 
                               @update:model-value="(val: number | null) => updateSettings('gain', val !== null ? val : 0)"
                               :disable="!selectedCamera || selectedCamera.status !== 'online'" />
@@ -443,7 +509,6 @@ import { settingsService, Device } from '@/services/settings'
 import { CVOperation, CVOperationService, ParamType } from '@/services/cv_operation'
 import { Pipeline, PipelineService } from '@/services/pipeline'
 import { detectionService } from '@/services/detection'
-import { apiService } from '@/services/api'
 import axios from 'axios'
 
 // 修复前端代码中的类型错误
@@ -512,6 +577,9 @@ const cameraSettings = reactive({
 
 // 检测结果
 const detectionResult = ref<any>(null)
+
+// 添加结果状态过滤器
+const resultStatusFilter = ref<string>('all')
 
 // 实时处理状态
 const processingStream = ref(false)
@@ -879,13 +947,13 @@ const captureOnce = async () => {
     
     $q.notify({
       type: 'positive',
-      message: t('realtime.notifications.processingComplete'),
+      message: t('detection.notifications.processingComplete'),
       position: 'top'
     })
   } catch (error) {
     $q.notify({
       type: 'negative',
-      message: t('realtime.notifications.processingFailed', { error: (error as Error).message }),
+      message: t('detection.notifications.processingFailed', { error: (error as Error).message }),
       position: 'top'
     })
   }
@@ -902,7 +970,7 @@ const toggleStreamProcessing = async () => {
   if (!selectedCamera.value) {
     $q.notify({
       type: 'warning',
-      message: t('realtime.notifications.selectCamera'),
+      message: t('detection.notifications.selectCamera'),
       position: 'top'
     })
     return
@@ -911,7 +979,7 @@ const toggleStreamProcessing = async () => {
   if (!selectedOperation.value || selectedOperation.value === 'none') {
     $q.notify({
       type: 'warning',
-      message: t('realtime.notifications.selectOperation'),
+      message: t('detection.notifications.selectOperation'),
       position: 'top'
     })
     return
@@ -920,7 +988,7 @@ const toggleStreamProcessing = async () => {
   if (selectedCamera.value.status !== 'online') {
     $q.notify({
       type: 'warning',
-      message: t('realtime.notifications.cameraUnavailable'),
+      message: t('detection.notifications.cameraUnavailable'),
       position: 'top'
     })
     return
@@ -928,14 +996,14 @@ const toggleStreamProcessing = async () => {
   
   $q.notify({
     type: 'info',
-    message: t('realtime.notifications.startProcessing'),
+    message: t('detection.notifications.startProcessing'),
     position: 'top'
   })
   
   try {
     const operation = selectedOperation.value
     if (!operation) {
-      throw new Error(t('realtime.notifications.invalidOperation'))
+      throw new Error(t('detection.notifications.invalidOperation'))
     }
     
     // 启动处理流
@@ -943,13 +1011,13 @@ const toggleStreamProcessing = async () => {
     
     $q.notify({
       type: 'positive',
-      message: t('realtime.notifications.streamStarted'),
+      message: t('detection.notifications.streamStarted'),
       position: 'top'
     })
   } catch (error) {
     $q.notify({
       type: 'negative',
-      message: t('realtime.notifications.streamStartFailed', { error: (error as Error).message }),
+      message: t('detection.notifications.streamStartFailed', { error: (error as Error).message }),
       position: 'top'
     })
   }
@@ -1137,13 +1205,13 @@ const toggleAutoDetect = async () => {
   if (autoDetect.value) {
     $q.notify({
       type: 'info',
-      message: t('realtime.notifications.autoDetectStarted'),
+      message: t('detection.notifications.autoDetectStarted'),
       position: 'top'
     })
   } else {
     $q.notify({
       type: 'info',
-      message: t('realtime.notifications.autoDetectStopped'),
+      message: t('detection.notifications.autoDetectStopped'),
       position: 'top'
     })
   }
@@ -1162,10 +1230,10 @@ const formatDateTime = (date: any) => {
 // 设备状态文本
 const deviceStatusText = (status: string): string => {
   switch (status) {
-    case 'online': return t('realtime.status.online')
-    case 'offline': return t('realtime.status.offline')
-    case 'error': return t('realtime.status.error')
-    default: return t('realtime.status.unknown')
+    case 'online': return t('detection.status.online')
+    case 'offline': return t('detection.status.offline')
+    case 'error': return t('detection.status.error')
+    default: return t('detection.status.unknown')
   }
 }
 
@@ -1182,7 +1250,7 @@ watch(selectedCamera, (newCamera) => {
     // 通知用户
     $q.notify({
       type: 'info',
-      message: t('realtime.notifications.cameraSelected', { name: newCamera.name }),
+      message: t('detection.notifications.cameraSelected', { name: newCamera.name }),
       position: 'top'
     })
   }
@@ -1259,6 +1327,111 @@ const getOperationName = (operationValue: string | null): string => {
   return option.label
 }
 
+// 添加过滤后的批量结果计算属性
+const filteredBatchResults = computed(() => {
+  if (!resultStatusFilter.value || resultStatusFilter.value === 'all') {
+    return batchResults.value
+  }
+  
+  return batchResults.value.filter(result => {
+    if (resultStatusFilter.value === 'pass') {
+      return result.passed
+    } else if (resultStatusFilter.value === 'fail') {
+      return !result.passed
+    }
+    return true
+  })
+})
+
+// 添加手动上传图片的相关变量
+const manualUploadFiles = ref<any[]>([])
+
+// 处理QFile组件的图片选择
+const onManualImageSelect = (file: any) => {
+  console.log('QFile选择图片:', file)
+  if (file) {
+    // 确保manualUploadFiles是一个数组
+    manualUploadFiles.value = [file]
+  }
+}
+
+// 处理手动图片移除
+const onManualImageRemove = (file: any) => {
+  console.log('移除图片:', file)
+  // 清除选择的结果状态
+  resultStatusFilter.value = 'all'
+  // 清空文件数组
+  manualUploadFiles.value = []
+}
+
+// 处理结果状态变化
+const onResultStatusChange = async (status: string) => {
+  console.log('结果状态变化:', status)
+  
+  // 更新结果状态过滤器
+  resultStatusFilter.value = status
+  
+  // 如果有上传的图片，立即应用检测结果
+  if (manualUploadFiles.value && manualUploadFiles.value.length > 0) {
+    await applyManualResult()
+  }
+}
+
+// 应用手动检测结果
+const applyManualResult = async () => {
+  if (!manualUploadFiles.value || manualUploadFiles.value.length === 0) {
+    $q.notify({ type: 'warning', message: '请先上传图片', position: 'top' })
+    return
+  }
+  
+  if (resultStatusFilter.value === 'all') {
+    $q.notify({ type: 'warning', message: '请选择检测结果', position: 'top' })
+    return
+  }
+  
+  try {
+    const file = manualUploadFiles.value[0]
+    const isPassed = resultStatusFilter.value === 'pass'
+    
+    // 读取图片为base64
+    const base64Image = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        if (e.target && typeof e.target.result === 'string') {
+          resolve(e.target.result)
+        } else {
+          reject(new Error('无法读取图片'))
+        }
+      }
+      reader.onerror = () => reject(new Error('图片读取失败'))
+      reader.readAsDataURL(file)
+    })
+    
+    // 创建检测结果
+    detectionResult.value = {
+      imageData: base64Image,
+      timestamp: new Date(),
+      passed: isPassed,
+      text: `手动标记为${isPassed ? 'OK' : 'NG'}`,
+      confidence: 100,
+      sourceType: '手动上传',
+      fileName: file.name
+    }
+    
+    // 保存检测结果
+    await saveDetectionResult()
+    
+    // 清除手动上传的文件和选择的结果
+    manualUploadFiles.value = []
+    resultStatusFilter.value = 'all'
+    
+    $q.notify({ type: 'positive', message: '检测结果已应用', position: 'top' })
+  } catch (error) {
+    console.error('应用手动检测结果失败:', error)
+    $q.notify({ type: 'negative', message: '应用检测结果失败', position: 'top' })
+  }
+}
+
 // 修改 onCapture 函数处理批量上传
 const onCapture = async (result: any) => {
   // 检查是否为批量上传
@@ -1277,7 +1450,7 @@ const onCapture = async (result: any) => {
   if (!selectedOperation.value || selectedOperation.value === 'none') {
     $q.notify({
       type: 'warning',
-      message: t('realtime.notifications.selectOperation'),
+      message: t('detection.notifications.selectOperation'),
       position: 'top'
     })
     return
@@ -1538,7 +1711,7 @@ const processBatchImages = async (batchImages: {imageData: string, fileName: str
   if (!selectedOperation.value || selectedOperation.value === 'none') {
     $q.notify({
       type: 'warning',
-      message: t('realtime.notifications.selectOperation'),
+      message: t('detection.notifications.selectOperation'),
       position: 'top'
     })
     return
@@ -1780,7 +1953,7 @@ const processImage = async () => {
   if (!selectedOperation.value || selectedOperation.value === 'none') {
     $q.notify({
       type: 'warning',
-      message: t('realtime.notifications.selectOperation'),
+      message: t('detection.notifications.selectOperation'),
       position: 'top'
     })
     return
@@ -1790,7 +1963,7 @@ const processImage = async () => {
   if (!isStreaming.value && !uploadedImage.value) {
     $q.notify({
       type: 'warning',
-      message: t('realtime.notifications.uploadImage'),
+      message: t('detection.notifications.uploadImage'),
       position: 'top'
     })
     
@@ -1816,7 +1989,7 @@ const processImage = async () => {
       if (captureBtn) {
         (captureBtn as HTMLButtonElement).click()
       } else {
-        throw new Error(t('realtime.notifications.noCameraControl'))
+        throw new Error(t('detection.notifications.noCameraControl'))
       }
     } 
     // 如果是上传的图片模式，触发处理按钮
@@ -1825,22 +1998,22 @@ const processImage = async () => {
       if (processBtn) {
         (processBtn as HTMLButtonElement).click()
       } else {
-        throw new Error(t('realtime.notifications.noCameraControl'))
+        throw new Error(t('detection.notifications.noCameraControl'))
       }
     }
   } else {
-    throw new Error(t('realtime.notifications.noCameraControl'))
+    throw new Error(t('detection.notifications.noCameraControl'))
   }
 }
 
 // 启动处理流函数
 const startStream = async () => {
   if (!selectedCamera.value || !selectedOperation.value) {
-    throw new Error(t('realtime.notifications.invalidOperation'))
+    throw new Error(t('detection.notifications.invalidOperation'))
   }
 
   $q.loading.show({
-    message: t('realtime.notifications.startProcessing'),
+    message: t('detection.notifications.startProcessing'),
     spinnerColor: 'primary',
     backgroundColor: 'dark',
   })
@@ -1849,7 +2022,7 @@ const startStream = async () => {
     // 获取操作信息
     const selectedOp = mergedOperationOptions.value.find(opt => opt.value === selectedOperation.value)
     if (!selectedOp) {
-      throw new Error(t('realtime.notifications.invalidOperation'))
+      throw new Error(t('detection.notifications.invalidOperation'))
     }
     
     // 确定操作类型和ID
@@ -1857,7 +2030,7 @@ const startStream = async () => {
     const operationId = parseInt(selectedOperation.value.split(':')[1])
     
     if (isNaN(operationId)) {
-      throw new Error(t('realtime.notifications.invalidOperation'))
+      throw new Error(t('detection.notifications.invalidOperation'))
     }
     
     // 获取摄像头ID
@@ -1889,7 +2062,7 @@ const startStream = async () => {
 </script>
 
 <style lang="scss" scoped>
-.realtime-page {
+.detection-page {
   background: var(--dark-page);
 }
 

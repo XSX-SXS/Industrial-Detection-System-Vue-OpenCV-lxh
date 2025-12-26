@@ -1,8 +1,8 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, RouteRecordRaw, RouteLocationNormalized } from 'vue-router'
 import i18n from '../i18n/index'
 
 // 路由配置
-const routes = [
+const routes: RouteRecordRaw[] = [
   {
     path: '/',
     redirect: '/dashboard'
@@ -14,10 +14,10 @@ const routes = [
     meta: { title: i18n.global.t('routes.dashboard'), icon: 'dashboard' }
   },
   {
-    path: '/realtime',
-    name: 'Realtime',
+    path: '/detection',
+    name: 'Detection',
     component: () => import('../views/Realtime.vue'),
-    meta: { title: i18n.global.t('routes.realtime'), icon: 'monitor' }
+    meta: { title: i18n.global.t('routes.detection'), icon: 'search' }
   },
   {
     path: '/history',
@@ -41,9 +41,9 @@ const routes = [
     path: '/model/test/:id',
     name: 'ModelTest',
     component: () => import('../views/Model.vue'),
-    props: route => ({
+    props: (route: RouteLocationNormalized) => ({
       mode: 'test',
-      modelId: parseInt(route.params.id)
+      modelId: parseInt(route.params.id as string)
     }),
     meta: { title: i18n.global.t('routes.modelTest'), parent: 'Model' }
   },

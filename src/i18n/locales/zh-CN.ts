@@ -145,7 +145,7 @@ export default {
   },
   routes: {
     dashboard: '仪表盘',
-    realtime: '实时监控',
+    detection: '检测模块',
     history: '历史记录',
     annotation: '数据标注',
     model: '模型训练',
@@ -652,8 +652,8 @@ export default {
       selectFeature: '请选择功能或操作'
     },
   },
-  realtime: {
-    title: '实时监控',
+  detection: {
+    title: '检测模块',
     camera: {
       select: '选择相机',
       video: '相机视频',
@@ -679,8 +679,8 @@ export default {
       title: '检测结果',
       waiting: '等待检测结果...',
       status: {
-        pass: '合格',
-        fail: '不合格'
+        pass: 'OK',
+        fail: 'NG'
       },
       details: {
         time: '检测时间',
