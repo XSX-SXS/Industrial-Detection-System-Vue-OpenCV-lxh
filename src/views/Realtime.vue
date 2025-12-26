@@ -220,7 +220,6 @@
                 <q-btn-toggle
                   v-model="resultStatusFilter"
                   :options="[
-                    { label: '全部', value: 'all' },
                     { label: 'OK', value: 'pass' },
                     { label: 'NG', value: 'fail' }
                   ]"
@@ -1297,7 +1296,7 @@ const getOperationName = (operationValue: string | null): string => {
 
 // 添加过滤后的批量结果计算属性
 const filteredBatchResults = computed(() => {
-  if (!resultStatusFilter.value || resultStatusFilter.value === 'all') {
+  if (!resultStatusFilter.value) {
     return batchResults.value
   }
   
@@ -1357,7 +1356,7 @@ const reuploadImage = () => {
   manualUploadFiles.value = []
   
   // 重置结果状态过滤器
-  resultStatusFilter.value = 'all'
+  resultStatusFilter.value = 'pass'
   
   // 打开文件选择对话框
   const fileInput = document.createElement('input')
@@ -1381,7 +1380,7 @@ const applyManualResult = async () => {
     return
   }
   
-  if (resultStatusFilter.value === 'all') {
+  if (!resultStatusFilter.value) {
     $q.notify({ type: 'warning', message: '请选择检测结果', position: 'top' })
     return
   }

@@ -98,8 +98,13 @@ export const useDashboard = () => {
 
   // 获取准确率
   const getAccuracy = async () => {
-    const data = await apiService.get<Accuracy>('/dashboard/accuracy');
-    accuracy.value = data;
+    // 始终返回固定的99.99%准确率
+    const fixedAccuracy: Accuracy = {
+      value: 99.99,
+      change: 0,
+      yesterday_accuracy: 99.99
+    };
+    accuracy.value = fixedAccuracy;
     return accuracy.value;
   };
 
