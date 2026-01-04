@@ -737,6 +737,9 @@ const mergedOperationOptions = computed<OperationOption[]>(() => {
   
   // 添加缺陷检测选项
   options.push({ label: '缺陷检测', value: 'defectDetection', type: 'operation', description: '检测图像中的缺陷', supportsDetection: true })
+  // 添加CVD和PVD操作
+  options.push({ label: 'CVD', value: 'cvdOperation', type: 'operation', description: 'CVD操作', supportsDetection: true })
+  options.push({ label: 'PVD', value: 'pvdOperation', type: 'operation', description: 'PVD操作', supportsDetection: true })
   
   return options
 })
@@ -1358,7 +1361,7 @@ const reuploadImage = () => {
   manualUploadFiles.value = []
   
   // 重置结果状态过滤器
-  resultStatusFilter.value = 'pass'
+  resultStatusFilter.value = 'all'
   
   // 打开文件选择对话框
   const fileInput = document.createElement('input')
@@ -1419,9 +1422,8 @@ const applyManualResult = async () => {
     // 保存检测结果
     await saveDetectionResult()
     
-    // 清除手动上传的文件和选择的结果
+    // 清除手动上传的文件，但保留选择的结果状态
     manualUploadFiles.value = []
-    resultStatusFilter.value = 'all'
     
     $q.notify({ type: 'positive', message: '检测结果已应用', position: 'top' })
   } catch (error) {
