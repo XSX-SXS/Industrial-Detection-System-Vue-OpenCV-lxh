@@ -238,17 +238,22 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 .industrial-status-bar {
   height: 64px;
-  padding: 0 16px;
+  padding: 0 24px;
   background-color: var(--dark-surface);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .menu-button {
-  background: linear-gradient(145deg, #3A3F45, #2D3238);
-  border: 1px solid #4A4E54;
-  box-shadow: 
-    inset 0 1px 1px rgba(255,255,255,0.1),
-    0 1px 3px rgba(0,0,0,0.3);
+  background: var(--dark-surface-hover);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: var(--equipment-gray);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  }
 }
 
 .system-title {
@@ -258,7 +263,7 @@ onBeforeUnmount(() => {
   .title-container {
     height: 100%;
     max-width: 400px;
-    border-radius: 4px;
+    border-radius: 8px;
     overflow: hidden;
   }
   
@@ -271,21 +276,28 @@ onBeforeUnmount(() => {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 16px;
-    font-weight: 500;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    padding: 0 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    
+    img {
+      max-height: 28px;
+    }
   }
 }
 
 .version-badge {
   font-size: 12px;
   padding: 4px 8px;
+  background: var(--accent-blue);
+  color: white;
+  border-radius: 12px;
 }
 
 .status-indicators {
   display: flex;
   align-items: center;
-  gap: 36px;
+  gap: 48px;
   position: relative;
   
   .status-item {
@@ -297,21 +309,23 @@ onBeforeUnmount(() => {
     &:not(:last-child)::after {
       content: '';
       position: absolute;
-      right: -18px;
+      right: -24px;
       top: 50%;
       transform: translateY(-50%);
       height: 20px;
       width: 1px;
-      background: rgba(255, 255, 255, 0.15);
+      background: var(--border-color);
     }
     
     .status-label {
-      margin-right: 8px;
-      color: rgba(255, 255, 255, 0.7);
+      margin-right: 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
     }
     
     .status-value {
-      font-weight: 500;
+      font-weight: 600;
+      color: var(--text-primary);
     }
   }
 }
@@ -330,29 +344,97 @@ onBeforeUnmount(() => {
 }
 
 .status-idle {
-  color: #aaa;
+  color: var(--text-muted);
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+  .industrial-status-bar {
+    padding: 0 16px;
+  }
+  
+  .status-indicators {
+    gap: 32px;
+  }
+  
+  .status-item::after {
+    right: -16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .industrial-status-bar {
+    height: 56px;
+  }
+  
+  .system-title {
+    .title-content {
+      img {
+        max-height: 24px;
+        margin-right: 8px;
+      }
+    }
+  }
+  
+  .status-indicators {
+    gap: 24px;
+  }
+  
+  .status-item {
+    font-size: 12px;
+    
+    &::after {
+      display: none;
+    }
+  }
+  
+  .version-badge {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .status-indicators {
+    gap: 16px;
+  }
+  
+  .status-item {
+    .status-label {
+      margin-right: 4px;
+    }
+  }
+  
+  .system-title {
+    .title-content {
+      font-size: 14px;
+      img {
+        max-height: 20px;
+        margin-right: 6px;
+      }
+    }
+  }
 }
 
 .status-tooltip {
-  min-width: 180px;
-  max-width: 300px;
-  background: #1E2126;
-  border: 1px solid #3A3F45;
-  border-radius: 4px;
+  min-width: 200px;
+  max-width: 350px;
+  background: var(--dark-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
   padding: 0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   
   .tooltip-title {
-    background: #2D3238;
-    padding: 8px 12px;
-    font-weight: 500;
-    border-bottom: 1px solid #3A3F45;
-    border-radius: 4px 4px 0 0;
+    background: var(--industrial-blue);
+    padding: 10px 16px;
+    font-weight: 600;
+    color: white;
+    border-radius: 8px 8px 0 0;
   }
   
   .tooltip-content {
-    padding: 8px 12px;
-    max-height: 200px;
+    padding: 12px 16px;
+    max-height: 250px;
     overflow-y: auto;
   }
   
@@ -360,37 +442,93 @@ onBeforeUnmount(() => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 4px 0;
+    padding: 6px 0;
     
     &:not(:last-child) {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid var(--border-color);
     }
     
     .tooltip-item-name {
       margin-right: 12px;
+      color: var(--text-primary);
+      font-weight: 500;
     }
     
     &.simple-list {
-      padding: 4px 0;
+      padding: 6px 0;
       justify-content: flex-start;
       
       .tooltip-item-name {
         margin-right: 0;
         font-size: 14px;
+        color: var(--text-secondary);
       }
     }
   }
 }
 
-@keyframes pulse {
-  0% {
-    opacity: 1;
+/* 响应式设计 */
+@media (max-width: 1024px) {
+  .status-indicators {
+    gap: 32px;
+    
+    .status-item {
+      &:not(:last-child)::after {
+        right: -16px;
+      }
+    }
   }
-  50% {
-    opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+  .industrial-status-bar {
+    height: 56px;
+    padding: 0 12px;
   }
-  100% {
-    opacity: 1;
+  
+  .system-title {
+    height: 36px;
+    
+    .title-container {
+      max-width: 250px;
+    }
+    
+    .title-content {
+      padding: 0 12px;
+      font-size: 14px;
+      
+      img {
+        max-height: 24px;
+        margin-right: 8px;
+      }
+    }
+  }
+  
+  .version-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+  
+  .status-indicators {
+    gap: 24px;
+    
+    .status-item {
+      font-size: 12px;
+      
+      &:not(:last-child)::after {
+        right: -12px;
+      }
+      
+      .status-label {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .status-indicators {
+    display: none;
   }
 }
 </style>

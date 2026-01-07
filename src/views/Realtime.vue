@@ -45,6 +45,33 @@
               </q-select>
               
               <q-select
+                v-model="selectedModel"
+                :options="models"
+                color="primary"
+                label="选择模型"
+                dense
+                outlined
+                style="min-width: 220px"
+                :disable="processingStream || isProcessingImage"
+                option-label="name"
+                option-value="id"
+              >
+                <template v-slot:option="{ itemProps, opt, selected }">
+                  <q-item v-bind="itemProps">
+                    <q-item-section>
+                      <q-item-label>{{ opt.name }}</q-item-label>
+                      <q-item-label caption>{{ opt.architecture }}</q-item-label>
+                    </q-item-section>
+                    <q-item-section avatar>
+                      <q-badge :color="opt.status === 'completed' ? 'positive' : 'negative'">
+                        {{ opt.status === 'completed' ? '已完成' : '训练中' }}
+                      </q-badge>
+                    </q-item-section>
+                  </q-item>
+                </template>
+              </q-select>
+              
+              <q-select
                 v-model="selectedStation"
                 :options="stationOptions"
                 color="primary"
@@ -355,12 +382,6 @@
                       </q-item>
                       <q-item>
                         <q-item-section>
-                          <q-item-label caption class="text-grey-5">识别文本</q-item-label>
-                          <q-item-label>{{ result.text || '未识别到文本' }}</q-item-label>
-                        </q-item-section>
-                      </q-item>
-                      <q-item>
-                        <q-item-section>
                           <q-item-label caption class="text-grey-5">置信度</q-item-label>
                           <q-item-label>{{ result.confidence ? result.confidence.toFixed(1) + '%' : 'N/A' }}</q-item-label>
                         </q-item-section>
@@ -472,6 +493,7 @@ import { cameraService } from '@/services/camera'
 import { settingsService, Device } from '@/services/settings'
 import { CVOperation, CVOperationService, ParamType } from '@/services/cv_operation'
 import { Pipeline, PipelineService } from '@/services/pipeline'
+import { Model, modelService } from '@/services/model'
 import { detectionService } from '@/services/detection'
 import axios from 'axios'
 
@@ -506,6 +528,11 @@ console.log('cameraService实例:', cameraService)
 
 const cvOperationService = new CVOperationService()
 const pipelineService = new PipelineService()
+
+// 模型相关变量
+const models = ref<Model[]>([])
+const selectedModel = ref<number | null>(null)
+const modelsLoading = ref(false)
 
 // 相机列表和选中的相机
 const cameras = ref<Device[]>([])
@@ -592,6 +619,25 @@ interface OperationOption {
   description?: string | undefined;
   operation?: any;
   supportsDetection?: boolean;
+}
+
+// 加载模型列表
+const loadModels = async () => {
+  try {
+    modelsLoading.value = true
+    const modelList = await modelService.getModels()
+    // 只显示已完成训练的模型
+    models.value = modelList.filter(model => model.status === 'completed')
+  } catch (error) {
+    console.error('加载模型列表失败:', error)
+    $q.notify({
+      type: 'negative',
+      message: '加载模型列表失败',
+      position: 'top'
+    })
+  } finally {
+    modelsLoading.value = false
+  }
 }
 
 // 加载操作列表
@@ -1253,6 +1299,9 @@ onMounted(async () => {
   // 然后加载相机列表
   await loadCameras()
   
+  // 加载模型列表
+  await loadModels()
+  
   // 定期刷新相机状态
   setInterval(loadCameras, 10000)
 })
@@ -1545,6 +1594,10 @@ const onCapture = async (result: any) => {
       formData.append('image', blob, result.fileName || 'image.jpg')
       formData.append('operation_id', operationId.toString())
       formData.append('operation_type', operationType)
+      // 如果选择了模型，添加模型参数
+      if (selectedModel.value) {
+        formData.append('model_id', selectedModel.value.toString())
+      }
       
       response = await axios.post(
         `${API_BASE_URL}/cameras/process-image`,
@@ -1598,7 +1651,9 @@ const onCapture = async (result: any) => {
             params: {
               operation_id: operationId,
               operation_type: operationType,
-              return_json: true  // 明确请求JSON格式的响应
+              return_json: true,  // 明确请求JSON格式的响应
+              // 如果选择了模型，添加模型参数
+              ...(selectedModel.value ? { model_id: selectedModel.value } : {})
             },
             responseType: 'json',  // 改为json，因为我们期望接收JSON对象
             timeout: 10000 // 10秒超时
@@ -2060,7 +2115,9 @@ const startStream = async () => {
       cameraId,
       {
         operation_id: operationId,
-        operation_type: operationType
+        operation_type: operationType,
+        // 如果选择了模型，添加模型参数
+        ...(selectedModel.value ? { model_id: selectedModel.value } : {})
       }
     ) + `&_t=${new Date().getTime()}`
     

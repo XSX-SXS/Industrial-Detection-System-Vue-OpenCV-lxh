@@ -122,37 +122,40 @@ defineEmits(['click']);
   width: 80%;
   height: 80%;
   border-radius: 50%;
-  background: #333;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-  border: 2px solid #444;
+  background: var(--dark-surface);
+  border: 2px solid var(--border-color);
   overflow: hidden;
+  transition: all 0.3s ease;
   
   &.normal {
-    background: linear-gradient(145deg, #1a9a3c, #21BA45);
+    background: linear-gradient(135deg, var(--status-green) 0%, #166534 100%);
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.6);
     
     .light-glow {
-      background: radial-gradient(circle, rgba(33,186,69,0.8) 0%, rgba(33,186,69,0) 70%);
+      background: radial-gradient(circle, var(--status-green) 0%, transparent 70%);
     }
   }
   
   &.warning {
-    background: linear-gradient(145deg, #d9a730, #F2C037);
+    background: linear-gradient(135deg, var(--status-yellow) 0%, #92400E 100%);
+    box-shadow: 0 0 20px rgba(234, 179, 8, 0.6);
     
     .light-glow {
-      background: radial-gradient(circle, rgba(242,192,55,0.8) 0%, rgba(242,192,55,0) 70%);
+      background: radial-gradient(circle, var(--status-yellow) 0%, transparent 70%);
     }
   }
   
   &.error {
-    background: linear-gradient(145deg, #a30012, #C10015);
+    background: linear-gradient(135deg, var(--status-red) 0%, #991B1B 100%);
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
     
     .light-glow {
-      background: radial-gradient(circle, rgba(193,0,21,0.8) 0%, rgba(193,0,21,0) 70%);
+      background: radial-gradient(circle, var(--status-red) 0%, transparent 70%);
     }
   }
   
   &.inactive {
-    background: linear-gradient(145deg, #3a3f45, #4A4E54);
+    background: linear-gradient(135deg, var(--border-color) 0%, #475569 100%);
     
     .light-glow {
       display: none;
@@ -165,7 +168,7 @@ defineEmits(['click']);
     left: -50%;
     width: 200%;
     height: 200%;
-    opacity: 0.7;
+    opacity: 0.5;
     animation: pulse 2s infinite;
   }
 }
@@ -182,14 +185,14 @@ defineEmits(['click']);
   
   .gauge-bg {
     fill: none;
-    stroke: #3A3F45;
+    stroke: var(--border-color);
     stroke-width: 12;
     stroke-linecap: round;
   }
   
   .gauge-fill {
     fill: none;
-    stroke: var(--industrial-blue);
+    stroke: var(--accent-blue);
     stroke-width: 12;
     stroke-linecap: round;
     transition: stroke-dasharray 0.5s ease;
@@ -199,13 +202,13 @@ defineEmits(['click']);
     font-size: 24px;
     font-weight: bold;
     text-anchor: middle;
-    fill: #fff;
+    fill: var(--text-primary);
   }
   
   .gauge-label {
     font-size: 14px;
     text-anchor: middle;
-    fill: #aaa;
+    fill: var(--text-secondary);
   }
 }
 
@@ -223,10 +226,10 @@ defineEmits(['click']);
     left: 0;
     width: 100%;
     height: 100%;
-    background: #2D3238;
-    border: 2px solid #3A3F45;
-    border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    background: linear-gradient(135deg, var(--dark-surface) 0%, var(--dark-page) 100%);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
   }
   
   .button-surface {
@@ -238,20 +241,26 @@ defineEmits(['click']);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(145deg, #4E5560, #3A3F45);
-    border-radius: 4px;
-    box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
-    transition: all 0.1s ease;
+    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--industrial-blue) 100%);
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+    transition: all 0.3s ease;
   }
   
   &.active .button-surface {
     top: 6px;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
-    background: linear-gradient(145deg, #3A3F45, #4E5560);
+    box-shadow: inset 0 4px 12px rgba(0,0,0,0.3);
+    background: linear-gradient(135deg, var(--industrial-blue) 0%, var(--accent-blue) 100%);
   }
   
   &:hover .button-surface {
-    background: linear-gradient(145deg, #5A6270, #4A4E54);
+    background: linear-gradient(135deg, var(--accent-blue) 0%, #60A5FA 100%);
+    box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+    transform: translateY(-1px);
+  }
+  
+  &:active .button-surface {
+    transform: translateY(1px);
   }
 }
 
@@ -259,12 +268,15 @@ defineEmits(['click']);
 .metal-panel {
   width: 100%;
   height: 100%;
-  background: linear-gradient(145deg, #3A3F45, #2D3238);
-  border: 1px solid #4A4E54;
-  border-radius: 4px;
-  box-shadow: 
-    inset 0 1px 1px rgba(255,255,255,0.1),
-    0 1px 3px rgba(0,0,0,0.3);
+  background: linear-gradient(135deg, var(--dark-surface) 0%, var(--dark-page) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+  }
   
   .panel-frame {
     width: 100%;
@@ -278,13 +290,16 @@ defineEmits(['click']);
 
 @keyframes pulse {
   0% {
-    opacity: 0.7;
+    opacity: 0.5;
+    transform: scale(1);
   }
   50% {
-    opacity: 0.3;
+    opacity: 0.8;
+    transform: scale(1.2);
   }
   100% {
-    opacity: 0.7;
+    opacity: 0.5;
+    transform: scale(1);
   }
 }
 </style>

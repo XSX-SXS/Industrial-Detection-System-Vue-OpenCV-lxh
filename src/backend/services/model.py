@@ -506,8 +506,19 @@ class ModelService:
             
             # 设置训练基本参数
             data_yaml_path = os.path.join(dataset_dir, "dataset.yaml")
-            project_dir = "models"
-            name = f"model_{model_id}"
+            
+            # 自动管理训练路径 - 支持从参数中获取或自动生成
+            training_path = parameters.get('training_path')
+            
+            if training_path:
+                # 如果提供了训练路径，使用该路径
+                project_dir = os.path.dirname(training_path)
+                name = os.path.basename(training_path)
+            else:
+                # 自动生成唯一训练路径（基于时间戳和模型ID）
+                timestamp = time.strftime("%Y%m%d_%H%M%S", time.localtime())
+                project_dir = "models"
+                name = f"model_{model_id}_{timestamp}"
             
             # 创建工作目录
             os.makedirs(os.path.join(project_dir, name), exist_ok=True)
@@ -1183,8 +1194,10 @@ class ModelService:
         
         # 创建dataset.yaml
         yaml_path = os.path.join(dataset_dir, "dataset.yaml")
+        # 使用绝对路径确保YOLO能够正确找到数据集
+        abs_dataset_dir = os.path.abspath(dataset_dir)
         with open(yaml_path, 'w') as f:
-            f.write("path: .\n")  # 使用相对路径，解决不同环境下路径不匹配问题
+            f.write(f"path: {abs_dataset_dir}\n")  # 使用绝对路径，确保YOLO能正确找到数据集
             f.write("train: train/images\n")
             f.write("val: val/images\n")
             f.write(f"nc: {len(class_names)}\n")  # 类别数量

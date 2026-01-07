@@ -1,53 +1,65 @@
 // Quasar SCSS Variables
 // --------------------------------------------------
-// 为Quasar框架定制工业风格
+// 为Quasar框架定制现代工业风格
 
 // 主色调
-$primary: #2A5CAA;
-$secondary: #4A4E54;
-$accent: #FF6B35;
+$primary: #1E40AF;
+$secondary: #334155;
+$accent: #F97316;
 
-$dark: #1D1D1D;
-$dark-page: #121212;
+// 深色主题
+$dark: #1E293B;
+$dark-page: #0F172A;
 
 // 状态颜色
-$positive: #21BA45;
-$negative: #C10015;
-$info: #31CCEC;
-$warning: #F2C037;
+$positive: #22C55E;
+$negative: #EF4444;
+$info: #3B82F6;
+$warning: #EAB308;
 
 // 字体
-$typography-font-family: 'Roboto', sans-serif;
+$typography-font-family: 'Roboto', 'Inter', sans-serif;
+$body-font-size: 16px;
+$body-line-height: 1.6;
 
 // 按钮样式
 $button-border-radius: 8px;
-$button-padding: 12px 24px;
-$button-font-size: 18px;
+$button-padding: 10px 20px;
+$button-font-size: 16px;
 $button-line-height: 1.5;
-$button-font-weight: 500;
+$button-font-weight: 600;
 
 // 卡片样式
-$card-border-radius: 8px;
-$card-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+$card-border-radius: 12px;
+$card-box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$card-header-border-radius: 12px 12px 0 0;
 
 // 表格样式
-$table-border-radius: 8px;
-$table-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+$table-border-radius: 12px;
+$table-box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
 // 输入框样式
 $input-border-radius: 8px;
-$input-font-size: 18px;
+$input-font-size: 16px;
+$input-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+$input-focus-box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 
 // 抽屉样式
 $drawer-width: 240px;
 $drawer-border-radius: 0;
+$drawer-box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 
 // 工具提示样式
-$tooltip-background: $dark;
-$tooltip-text-color: white;
+$tooltip-background: #1E293B;
+$tooltip-text-color: #FFFFFF;
 $tooltip-font-size: 14px;
+$tooltip-border-radius: 8px;
+$tooltip-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 
 // 通知样式
 $notify-position: top-right;
-$notify-timeout: 2500;
-$notify-text-color: white;
+$notify-timeout: 3000;
+$notify-text-color: #FFFFFF;
+$notify-border-radius: 8px;
+$notify-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+$notify-border: 1px solid #334155;

@@ -69,3 +69,63 @@ defineProps({
   }
 })
 </script>
+
+<style lang="scss" scoped>
+// 表单元素的现代工业风格
+.q-input,
+.q-select,
+.q-checkbox {
+  margin-bottom: 16px;
+  
+  .q-field__control {
+    border-color: var(--border-color);
+    background: var(--dark-surface);
+    border-radius: 8px;
+    
+    &:hover {
+      border-color: var(--accent-blue);
+    }
+    
+    &--focused {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+  }
+  
+  .q-field__input {
+    color: var(--text-primary);
+    
+    &::placeholder {
+      color: var(--text-muted);
+    }
+  }
+  
+  .q-field__label {
+    color: var(--text-secondary);
+  }
+}
+
+.q-select {
+  .q-field__control {
+    &:after {
+      color: var(--text-secondary);
+    }
+  }
+}
+
+.q-checkbox {
+  .q-checkbox__label {
+    color: var(--text-primary);
+  }
+  
+  .q-checkbox__inner {
+    border-color: var(--border-color);
+    background: var(--dark-surface);
+    
+    &--checked {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+    }
+  }
+}
+</style>

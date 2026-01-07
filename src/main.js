@@ -13,6 +13,7 @@ import 'quasar/src/css/index.sass'
 
 // Import global styles
 import './styles/global.scss'
+import './styles/legacy-ui.scss'
 
 // Create Vue app
 const app = createApp(App)

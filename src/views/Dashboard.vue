@@ -384,24 +384,24 @@ const initTrendChart = () => {
         {
           label: t('dashboard.trend.total'),
           data: totals,
-          borderColor: '#1976D2',
-          backgroundColor: 'rgba(25, 118, 210, 0.1)',
+          borderColor: 'var(--industrial-blue)',
+          backgroundColor: 'rgba(30, 64, 175, 0.1)',
           tension: 0.4,
           fill: true
         },
         {
           label: t('dashboard.trend.pass'),
           data: passes,
-          borderColor: '#21BA45',
-          backgroundColor: 'rgba(33, 186, 69, 0.1)',
+          borderColor: 'var(--status-green)',
+          backgroundColor: 'rgba(34, 197, 94, 0.1)',
           tension: 0.4,
           fill: true
         },
         {
           label: t('dashboard.trend.fail'),
           data: fails,
-          borderColor: '#C10015',
-          backgroundColor: 'rgba(193, 0, 21, 0.1)',
+          borderColor: 'var(--status-red)',
+          backgroundColor: 'rgba(239, 68, 68, 0.1)',
           tension: 0.4,
           fill: true
         }
@@ -416,28 +416,47 @@ const initTrendChart = () => {
           labels: {
             boxWidth: 12,
             font: {
-              size: 11
-            }
+              size: 11,
+              color: 'var(--text-primary)'
+            },
+            padding: 15
           }
         },
         tooltip: {
           mode: 'index',
-          intersect: false
+          intersect: false,
+          backgroundColor: 'var(--dark-surface)',
+          titleColor: 'var(--text-primary)',
+          bodyColor: 'var(--text-secondary)',
+          borderColor: 'var(--border-color)',
+          borderWidth: 1,
+          padding: 12,
+          displayColors: true
         }
       },
       scales: {
         y: {
           beginAtZero: true,
+          grid: {
+            color: 'var(--border-color)',
+            drawBorder: false
+          },
           ticks: {
             font: {
-              size: 10
+              size: 11,
+              color: 'var(--text-secondary)'
             }
           }
         },
         x: {
+          grid: {
+            color: 'var(--border-color)',
+            drawBorder: false
+          },
           ticks: {
             font: {
-              size: 10
+              size: 11,
+              color: 'var(--text-secondary)'
             }
           }
         }
@@ -482,49 +501,111 @@ onUnmounted(() => {
   max-width: 100%;
   overflow-x: hidden;
   background: var(--dark-page);
+  padding: 20px;
 }
 
 .dashboard-card {
   height: 100%;
-  background: var(--dark-card);
-  transition: all 0.2s ease;
+  background: var(--dark-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  transition: all 0.3s ease;
   overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
 }
 
 .chart-container {
-  height: 250px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.02);
-  padding: 8px;
+  height: 300px;
+  border-radius: 8px;
+  background: var(--dark-page);
+  padding: 16px;
+  margin: 8px;
 }
 
 .alert-list {
-  max-height: 200px;
+  max-height: 250px;
   overflow-y: auto;
+}
+
+// 更新图表颜色主题
+:deep(.chartjs-render-monitor) {
+  .chart-legend {
+    color: var(--text-primary);
+  }
 }
 
 // 修复滚动条样式问题
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 3px;
+  background: var(--dark-surface);
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+  .dashboard-page {
+    padding: 16px;
+  }
+  
+  .chart-container {
+    height: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-page {
+    padding: 12px;
+  }
+  
+  .dashboard-card {
+    border-radius: 8px;
+    
+    &:hover {
+      transform: none;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+  }
+  
+  .chart-container {
+    height: 200px;
+    padding: 12px;
+    margin: 4px;
+  }
+  
+  .alert-list {
+    max-height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-page {
+    padding: 8px;
+  }
+  
+  .chart-container {
+    height: 180px;
+    padding: 8px;
+  }
+  
+  .alert-list {
+    max-height: 150px;
+  }
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 3px;
+  background: var(--border-color);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--equipment-gray);
 }
 </style>

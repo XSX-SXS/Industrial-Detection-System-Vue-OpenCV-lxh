@@ -3,20 +3,26 @@
 // 导入Quasar变量
 @import './quasar-variables.scss';
 
-// 工业风格变量
+// 现代工业风格变量
 :root {
-  --dark-page: transparent;
-  --industrial-blue: #2A5CAA;
-  --industrial-blue-10: #275dad1A; /* 10% 透明度 */
-  --industrial-blue-50: #275dad80; /* 50% 透明度 */
-  --safety-orange: #FF6B35;
-  --equipment-gray: #4A4E54;
-  --dark-bg: #121212;
-  --dark-surface: #1D1D1D;
-  --status-green: #21BA45;
-  --status-red: #C10015;
-  --status-yellow: #F2C037;
-  --status-blue: #31CCEC;
+  --dark-page: #0F172A;
+  --industrial-blue: #1E40AF;
+  --industrial-blue-10: #1E40AF1A; /* 10% 透明度 */
+  --industrial-blue-50: #1E40AF80; /* 50% 透明度 */
+  --accent-blue: #3B82F6;
+  --safety-orange: #F97316;
+  --equipment-gray: #334155;
+  --dark-bg: #0F172A;
+  --dark-surface: #1E293B;
+  --dark-surface-hover: #334155;
+  --status-green: #22C55E;
+  --status-red: #EF4444;
+  --status-yellow: #EAB308;
+  --status-blue: #3B82F6;
+  --text-primary: #FFFFFF;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --border-color: #334155;
 }
 
 // 全局样式重置
@@ -27,71 +33,100 @@
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
-  font-size: 18px;
-  line-height: 1.5;
-  color: #fff;
-  background-color: var(--dark-bg);
+  font-family: 'Roboto', 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--dark-page);
   overflow: hidden;
 }
 
-// 工业按钮样式
+// 全局过渡效果
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+// 页面过渡效果
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.3s ease;
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+// 现代工业按钮样式
 .industrial-button {
-  border: 2px solid #3A3F45;
-  background: linear-gradient(180deg, #4E5560 0%, #2D3238 100%);
-  box-shadow: inset 0 2px 4px rgba(255,255,255,0.1);
-  min-height: 80px;
+  border: 2px solid var(--border-color);
+  background: linear-gradient(180deg, var(--accent-blue) 0%, var(--industrial-blue) 100%);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  min-height: 60px;
   border-radius: 8px;
-  font-size: 18px;
-  font-weight: 500;
-  transition: all 0.2s ease;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  color: white;
   
   &:hover {
-    box-shadow: inset 0 2px 8px rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
   }
   
   &:active {
-    transform: translateY(2px);
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
 }
 
-// 工业面板样式
+// 现代工业面板样式
 .industrial-panel {
-  background-color: rgba(29, 29, 29, 0.8);
-  border: 1px solid rgba(74, 78, 84, 0.5);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(4px);
+  background-color: var(--dark-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-// 状态指示器
+// 现代状态指示器
 .status-indicator {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  display: inline-block;
-  margin-right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
   position: relative;
+  font-size: 10px;
+  font-weight: bold;
+  color: white;
   
   &.running {
     background-color: var(--status-green);
-    box-shadow: 0 0 8px var(--status-green);
+    box-shadow: 0 0 12px var(--status-green);
   }
   
   &.warning {
     background-color: var(--status-yellow);
-    box-shadow: 0 0 8px var(--status-yellow);
+    box-shadow: 0 0 12px var(--status-yellow);
   }
   
   &.error {
     background-color: var(--status-red);
-    box-shadow: 0 0 8px var(--status-red);
+    box-shadow: 0 0 12px var(--status-red);
   }
   
   &.idle {
     background-color: var(--status-blue);
-    box-shadow: 0 0 8px var(--status-blue);
+    box-shadow: 0 0 12px var(--status-blue);
   }
   
   &.pulse {
@@ -124,181 +159,262 @@ body {
   }
 }
 
-// 工业数据表格
+// 现代工业数据表格
 .industrial-table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--dark-surface);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   
   th, td {
-    padding: 16px;
+    padding: 16px 20px;
     text-align: left;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
   
   th {
-    background-color: rgba(42, 92, 170, 0.2);
+    background-color: var(--industrial-blue);
     font-size: 16px;
-    font-weight: 500;
-    color: #fff;
+    font-weight: 600;
+    color: white;
+    border-bottom: none;
+  }
+  
+  tr {
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  tr:last-child {
+    border-bottom: none;
+  }
+  
+  td {
+    color: var(--text-primary);
+    background-color: var(--dark-surface);
+    transition: background-color 0.2s ease;
   }
   
   tr:hover td {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: var(--dark-surface-hover);
   }
   
   .highlight-row td {
-    background-color: rgba(255, 107, 53, 0.1);
+    background-color: rgba(249, 115, 22, 0.1);
     border-left: 4px solid var(--safety-orange);
   }
 }
 
-// 工业卡片
+// 现代工业卡片
 .industrial-card {
   background-color: var(--dark-surface);
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+  }
   
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 16px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
   }
   
   &__title {
     font-size: 20px;
-    font-weight: 500;
-    color: #fff;
+    font-weight: 600;
+    color: var(--text-primary);
   }
   
   &__content {
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--text-secondary);
   }
 }
 
-// 工业标签
+// 现代工业标签
 .industrial-tag {
   display: inline-flex;
   align-items: center;
-  padding: 4px 12px;
-  border-radius: 16px;
+  padding: 6px 14px;
+  border-radius: 18px;
   font-size: 14px;
-  font-weight: 500;
-  margin-right: 8px;
-  margin-bottom: 8px;
+  font-weight: 600;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
   
   &--primary {
-    background-color: rgba(42, 92, 170, 0.2);
-    color: #fff;
-    border: 1px solid rgba(42, 92, 170, 0.5);
+    background-color: rgba(30, 64, 175, 0.15);
+    color: var(--accent-blue);
+    border-color: rgba(30, 64, 175, 0.3);
   }
   
   &--warning {
-    background-color: rgba(242, 192, 55, 0.2);
-    color: #F2C037;
-    border: 1px solid rgba(242, 192, 55, 0.5);
+    background-color: rgba(234, 179, 8, 0.15);
+    color: var(--status-yellow);
+    border-color: rgba(234, 179, 8, 0.3);
   }
   
   &--error {
-    background-color: rgba(193, 0, 21, 0.2);
-    color: #C10015;
-    border: 1px solid rgba(193, 0, 21, 0.5);
+    background-color: rgba(239, 68, 68, 0.15);
+    color: var(--status-red);
+    border-color: rgba(239, 68, 68, 0.3);
   }
   
   &--success {
-    background-color: rgba(33, 186, 69, 0.2);
-    color: #21BA45;
-    border: 1px solid rgba(33, 186, 69, 0.5);
+    background-color: rgba(34, 197, 94, 0.15);
+    color: var(--status-green);
+    border-color: rgba(34, 197, 94, 0.3);
+  }
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
 }
 
-// 工业进度条
+// 现代工业进度条
 .industrial-progress {
   width: 100%;
-  height: 12px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
+  height: 14px;
+  background-color: var(--dark-surface-hover);
+  border-radius: 7px;
   overflow: hidden;
-  margin: 8px 0;
+  margin: 10px 0;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
   
   &__bar {
     height: 100%;
-    border-radius: 6px;
+    border-radius: 7px;
     transition: width 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      animation: progress-shine 2s infinite;
+    }
     
     &--primary {
-      background: linear-gradient(90deg, #1E4A8A 0%, #2A5CAA 100%);
+      background: linear-gradient(90deg, var(--industrial-blue) 0%, var(--accent-blue) 100%);
     }
     
     &--success {
-      background: linear-gradient(90deg, #158F34 0%, #21BA45 100%);
+      background: linear-gradient(90deg, #16A34A 0%, var(--status-green) 100%);
     }
     
     &--warning {
-      background: linear-gradient(90deg, #D9A730 0%, #F2C037 100%);
+      background: linear-gradient(90deg, #CA8A04 0%, var(--status-yellow) 100%);
     }
     
     &--error {
-      background: linear-gradient(90deg, #9A0010 0%, #C10015 100%);
+      background: linear-gradient(90deg, #DC2626 0%, var(--status-red) 100%);
     }
   }
 }
 
-// 工业滚动条样式
+@keyframes progress-shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+// 现代工业滚动条样式
 ::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(29, 29, 29, 0.8);
+  background: var(--dark-surface);
+  border-radius: 5px;
+  margin: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4A4E54;
-  border-radius: 6px;
-  border: 3px solid rgba(29, 29, 29, 0.8);
+  background: var(--border-color);
+  border-radius: 5px;
+  border: 2px solid var(--dark-surface);
+  transition: background-color 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #5A5E64;
+  background: var(--equipment-gray);
 }
 
-// 工业图标样式
+::-webkit-scrollbar-corner {
+  background: var(--dark-surface);
+}
+
+// 现代工业图标样式
 .industrial-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  margin-right: 8px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: var(--dark-surface-hover);
+  color: var(--text-primary);
+  margin-right: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+  font-size: 20px;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
   
   &--primary {
-    background-color: rgba(42, 92, 170, 0.2);
-    color: #fff;
+    background-color: rgba(30, 64, 175, 0.2);
+    color: var(--accent-blue);
   }
   
   &--warning {
-    background-color: rgba(242, 192, 55, 0.2);
-    color: #F2C037;
+    background-color: rgba(234, 179, 8, 0.2);
+    color: var(--status-yellow);
   }
   
   &--error {
-    background-color: rgba(193, 0, 21, 0.2);
-    color: #C10015;
+    background-color: rgba(239, 68, 68, 0.2);
+    color: var(--status-red);
   }
   
   &--success {
-    background-color: rgba(33, 186, 69, 0.2);
-    color: #21BA45;
+    background-color: rgba(34, 197, 94, 0.2);
+    color: var(--status-green);
+  }
+  
+  &.size-sm {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    border-radius: 8px;
+  }
+  
+  &.size-lg {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    border-radius: 16px;
   }
 }
 

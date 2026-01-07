@@ -13,7 +13,9 @@ export default {
     warning: '警告',
     info: '信息',
     menu: '菜单',
-    systemName: '工业AI识别系统'
+    systemName: '工业AI识别系统',
+    newUI: '新版界面',
+    legacyUI: '旧版界面'
   },
   settings: {
     system: {

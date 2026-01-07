@@ -13,7 +13,9 @@ export default {
     warning: 'Warning',
     info: 'Info',
     menu: 'Menu',
-    systemName: 'Industrial OCR System'
+    systemName: 'Industrial OCR System',
+    newUI: 'New UI',
+    legacyUI: 'Legacy UI'
   },
   settings: {
     system: {

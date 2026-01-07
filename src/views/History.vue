@@ -167,13 +167,6 @@
                 
                 <q-item>
                   <q-item-section>
-                    <q-item-label caption>{{ t('history.detail.text') }}</q-item-label>
-                    <q-item-label>{{ selectedRecord.text || t('history.detail.noText') }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                
-                <q-item>
-                  <q-item-section>
                     <q-item-label caption>{{ t('history.detail.confidence') }}</q-item-label>
                     <q-item-label>{{ selectedRecord.confidence ? `${selectedRecord.confidence.toFixed(1)}%` : 'N/A' }}</q-item-label>
                   </q-item-section>
@@ -248,7 +241,7 @@ const columns = [
     field: 'timestamp', 
     format: formatDateTime 
   },
-  { name: 'text', align: 'left' as const, label: t('history.columns.text'), field: 'text' },
+
   { name: 'confidence', align: 'center' as const, label: t('history.columns.confidence'), field: 'confidence' },
   { name: 'status', align: 'center' as const, label: t('history.columns.status'), field: 'status' },
   { name: 'deviceName', align: 'left' as const, label: t('history.columns.device'), field: 'deviceName' },

@@ -35,56 +35,36 @@ const routes = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-.industrial-nav-menu {
+.q-list {
   padding: 8px;
+}
+
+.q-item {
+  min-height: 56px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+  color: var(--text-primary);
   
-  .nav-item {
-    transition: all 0.3s ease;
-    border-radius: 8px;
-    margin-bottom: 4px;
-    padding: 8px 4px;
-    
-    .nav-item-content {
-      display: flex;
-      width: 100%;
-    }
-    
-    .icon-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
-      background: linear-gradient(145deg, #2D3238, #3A3F45);
-      box-shadow: 
-        inset 0 1px 1px rgba(255,255,255,0.1),
-        0 1px 2px rgba(0,0,0,0.2);
-    }
+  &:hover {
+    background: var(--dark-surface-hover);
+  }
+  
+  &.q-item--active {
+    background: var(--industrial-blue-10);
+    border-left: 4px solid var(--accent-blue);
+    color: var(--accent-blue);
     
     .q-icon {
-      color: var(--industrial-blue);
+      color: var(--accent-blue);
     }
-    
-    &:hover {
-      background: rgba(255, 255, 255, 0.05);
-      
-      .icon-container {
-        background: linear-gradient(145deg, #3A3F45, #4A4E54);
-      }
-    }
-    
-    &.q-item--active {
-      background: rgba(42, 92, 170, 0.15);
-      border-left: 3px solid var(--industrial-blue);
-      
-      .icon-container {
-        background: var(--industrial-blue);
-      }
-      
-      .q-icon {
-        color: white;
-      }
+  }
+  
+  .q-item-section {
+    .q-icon {
+      color: var(--text-secondary);
+      transition: color 0.3s ease;
     }
   }
 }

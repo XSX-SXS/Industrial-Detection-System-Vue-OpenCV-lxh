@@ -19,10 +19,10 @@ export default defineConfig({
         }
     },
     server: {
-        port: 3080,
+        port: 3000,
         open: true,
         host: '0.0.0.0', // 关键：监听所有网络接口，允许内网IP访问
-        strictPort: true, // 端口被占用时直接报错，而非自动换端口
+        strictPort: false, // 端口被占用时自动换端口
         allowedHosts: true,
         proxy: {
             '/api': {
